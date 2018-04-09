@@ -1,0 +1,94 @@
+navbar .btn-primary{
+    background-image: linear-gradient(rgb(252, 140, 20) 0px, rgb(247, 125, 14) 100%);
+    border-radius: 5px;
+    padding-right: 20px;
+
+    box-sizing: inherit;
+
+}
+.navbar{
+    box-shadow: 0 0 4px 0 rgba(0,0,0,.08), 0 2px 4px 0 rgba(0,0,0,.12);
+    background: #fff;
+    padding-left: 0px;
+    margin: 0px;
+    height: 64px;
+
+    width: 100%;
+    position:relative;
+
+}
+
+.SectionDivider {
+    border-bottom: 1px solid #dedede;
+    border-top: 0;
+    /*margin: 16px 32px;*/
+    margin-top: 16px;
+    margin-right: 32px;
+    margin-bottom: 16px;
+    margin-left: 32px;
+}
+
+#mp{
+    position: relative;
+}
+
+
+.nav-item{
+    padding-top: 5px;
+
+}
+
+a{
+    color: black;
+}
+
+#hiw,#fw,#hf{
+    padding-left: 10px;
+
+}
+
+.dropdown-header{
+    font-weight: bold;
+    color: darkgray;
+}
+
+
+#pop{
+
+    width: 126px;
+    height:40px;
+}
+
+#subheader{
+    background: #161e2c;
+    height: 51px;
+
+
+}
+
+#subheader a:hover{
+
+    color:gainsboro;
+    box-sizing: border-box;
+    text-decoration: underline;
+    background-color: gray;
+
+
+}
+
+#subheader a:active{
+
+    text-decoration: white; border-bottom: solid; border-width: 3px; border-bottom-color: deepskyblue;
+}
+
+
+#subheader a {
+    color: white;
+    font-size: 14px;
+    font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+*,::after, ::before{
+    box-sizing: border-box;
+}
