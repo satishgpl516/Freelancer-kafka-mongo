@@ -18,162 +18,181 @@ consumer.on('message', function (message) {
     var data = JSON.parse(message.value);
 
 
-    if(message.topic=='login') {
-        user.login(data.data, function (err, res) {
+    switch (message.topic){
+        case 'login':
+            user.login(data.data, function (err, res) {
+                response(data, res);
+                return;
+            });
+            break;
+        case 'signup':
+            user.signup(data.data, function(err,res) {
+                response(data, res);
+                return;
+            });
+            break;
+        case 'signup':
+            break;
 
-            response(data, res);
-            return;
-        });
     }
 
-    else if(message.topic=='getuser'){
-        user.getUserDetails(data.data, function(err,res){
 
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='upload'){
-        file.fileUpload(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='signup'){
-        user.signup(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='getfiles'){
-        file.getFiles(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='deletefile'){
-
-        file.fileDelete(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='makefolder'){
-
-        file.makeFolder(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='sharefile'){
-
-        file.shareFile(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='updateuser'){
-
-        user.updateUser(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='starfile'){
-
-        file.markUnmarkStar(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='getgroups'){
-
-        group.getGroups(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='deletegroup'){
-
-        group.deleteGroup(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='addgroup'){
-
-        group.addGroup(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='getmembers'){
-
-        group.getMembers(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='deletemember'){
-
-        group.deleteMember(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='addmember'){
-
-        group.addMember(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='sharefileingroup'){
-
-        file.shareFileInGroup(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
-
-    else if(message.topic=='downloadfile'){
-
-        file.downloadFile(data.data, function(err,res){
-
-            response(data, res);
-            return;
-        });
-    }
+    // if(message.topic=='login') {
+    //     user.login(data.data, function (err, res) {
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='getuser'){
+    //     user.getUserDetails(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='upload'){
+    //     file.fileUpload(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='signup'){
+    //     user.signup(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='getfiles'){
+    //     file.getFiles(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='deletefile'){
+    //
+    //     file.fileDelete(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='makefolder'){
+    //
+    //     file.makeFolder(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='sharefile'){
+    //
+    //     file.shareFile(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='updateuser'){
+    //
+    //     user.updateUser(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='starfile'){
+    //
+    //     file.markUnmarkStar(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='getgroups'){
+    //
+    //     group.getGroups(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='deletegroup'){
+    //
+    //     group.deleteGroup(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='addgroup'){
+    //
+    //     group.addGroup(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='getmembers'){
+    //
+    //     group.getMembers(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='deletemember'){
+    //
+    //     group.deleteMember(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='addmember'){
+    //
+    //     group.addMember(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='sharefileingroup'){
+    //
+    //     file.shareFileInGroup(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
+    //
+    // else if(message.topic=='downloadfile'){
+    //
+    //     file.downloadFile(data.data, function(err,res){
+    //
+    //         response(data, res);
+    //         return;
+    //     });
+    // }
 });
 
 function response(data, res) {

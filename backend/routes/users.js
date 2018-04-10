@@ -6,25 +6,31 @@ var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
 var User = require('../models/user');
 const saltRounds = 10;
-
+var kafka = require("./kafka/client");
 router.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
         if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
-        req.logIn(user, function(err) {
-            if (err) {
-                console.log(err);
-                return res.status(401);
-            }
-            else{
-                req.session.save(function(err){
-                    console.log(req.user);
-                    console.log(req.isAuthenticated());
-                    req.session.username = req.user;
-                    return res.status(201).json({username: req.user});
-                });
-            }
-        });
+        if (!user) {
+          //  return res.redirect('/login');
+            return res.status(401).json({message: "invalid user"});
+        }
+        else{
+            req.logIn(user, function(err) {
+                if (err) {
+                    console.log(err);
+                    return res.status(401);
+                }
+                else{
+                    req.session.save(function(err){
+                        console.log(req.user);
+                        console.log(req.isAuthenticated());
+                        req.session.username = req.user;
+                       return res.status(201).json({username: req.user});
+                    });
+                }
+            });
+        }
+
     })(req, res, next);
 });
 
@@ -199,49 +205,69 @@ router.post('/signup', function (req, res) {
 
   //  var reqPassword = saltHashPassword(req.body.password);
   //  console.log("password: "+reqPassword.passwordHash);
-    var reqPassword = req.body.password;
-    var reqUsername = req.body.username;
-    var reqemail = req.body.email;
+  //   var reqPassword = req.body.password;
+  //   var reqUsername = req.body.username;
+  //   var reqemail = req.body.email;
+  //
+  //   User.findOne({'local.email':reqemail},function(err,user){
+  //       if(err){
+  //           throw err;
+  //       }
+  //       else if(user){
+  //           res.status(401).json({message: 'This email already exists'})
+  //       }
+  //       else{
+  //           var newUser = new User();
+  //
+  //           newUser.local.id = reqUsername;
+  //           newUser.local.email = reqemail;
+  //           newUser.local.username= reqUsername;
+  //
+  //           bcrypt.hash(reqPassword,saltRounds,function (err,hash) {
+  //               if(err){
+  //                   res.status(401).json({message:'encryption failed'})
+  //               }
+  //               else{
+  //                   newUser.local.password = hash;
+  //                   newUser.save(function(err){
+  //                       if(err)
+  //                           throw err;
+  //                       else{
+  //                           req.login(newUser, function(err) {
+  //                               if (err) {
+  //                                   console.log(err);
+  //                               }
+  //                               res.status(201).json({message:'user saved successfully'});
+  //                           });
+  //                       }
+  //
+  //                   });
+  //               }
+  //           });
+  //
+  //       }
+  //
+  //   })
+    kafka.make_request('signup',{"user":req.body}, function(err,results){
 
-    User.findOne({'local.email':reqemail},function(err,user){
+        console.log('in result');
+        console.log(results);
         if(err){
-            throw err;
-        }
-        else if(user){
-            res.status(401).json({message: 'This email already exists'})
-        }
-        else{
-            var newUser = new User();
-
-            newUser.local.id = reqUsername;
-            newUser.local.email = reqemail;
-            newUser.local.username= reqUsername;
-
-            bcrypt.hash(reqPassword,saltRounds,function (err,hash) {
-                if(err){
-                    res.status(401).json({message:'encryption failed'})
-                }
-                else{
-                    newUser.local.password = hash;
-                    newUser.save(function(err){
-                        if(err)
-                            throw err;
-                        else{
-                            req.login(user, function(err) {
-                                if (err) {
-                                    console.log(err);
-                                }
-                                res.status(201).json({message:'user saved successfully'});
-                            });
-                        }
-
-                    });
-                }
-            });
+            res.status(401).json({message: "SignUp failed"});
 
         }
+        else
+        {
+            if(results.code === 201){
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "User Details Saved successfully"});
+            }
+            else {
+                res.status(401).json({message: "SignUp failed"});
 
-    })
+            }
+        }
+    });
 
 });
 
@@ -304,7 +330,7 @@ router.post('/userProfile',function(req, res) {
 //Logout the user - invalidate the session
 router.get('/logout', function (req, res) {
     console.log("Authenticated:",req.user);
-     req.logout();
+    req.logout();
     req.session.destroy(function (err) {
         if (!err) {
             res.status(200).clearCookie('connect.sid', {path: '/login'}).json({status: "Success"});

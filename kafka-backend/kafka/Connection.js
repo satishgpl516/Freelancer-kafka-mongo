@@ -6,10 +6,10 @@ function ConnectionProvider() {
 
             this.client = new kafka.Client("localhost:2181");
             this.kafkaConsumerConnection = new kafka.HighLevelConsumer(this.client,[
-                { topic: 'login'}
-                // { topic: 'getuser', partition: 0 },
-                // { topic: 'upload', partition: 0 },
-                // { topic: 'signup', partition: 0 },
+                { topic: 'login',partition: 0 },
+                 // { topic: 'getuser', partition: 0 },
+                 // { topic: 'upload', partition: 0 },
+                 { topic: 'signup', partition: 0 }
                 // { topic: 'getfiles', partition: 0 },
                 // { topic: 'deletefile', partition: 0 },
                 // { topic: 'makefolder', partition: 0 },

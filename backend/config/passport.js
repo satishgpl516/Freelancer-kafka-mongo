@@ -11,11 +11,13 @@ SALT_WORK_FACTOR = 10;
 module.exports = function(passport){
 
     passport.serializeUser(function(user, done) {
+        console.log('serialize',user);
         done(null, user.id);
     });
 // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
+         User.findOne({'local.id':id}, function(err, user) {
+             console.log('deserialize',user);
             done(err, user);
         });
     });
@@ -29,15 +31,14 @@ module.exports = function(passport){
             if(err){
                 done(err,{});
             }
-            else
-            {
-                if(results.code == 200){;
-                    console.log("I dont know")
-                    done(null,results.local);
-                }
-                else {
-                    done(null,false);
-                }
+            console.log("results status",results.local);
+            if(results.code == 401){;
+                console.log("hello strategy");
+                done(null,false,{message:"Invalid Username password"});
+            }
+            else {
+                console.log("I dont know");
+                done(null,results.local);
             }
         });
 

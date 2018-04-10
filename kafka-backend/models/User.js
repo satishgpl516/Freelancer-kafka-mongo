@@ -4,7 +4,7 @@ var Schema       = mongoose.Schema;
 
 
 var options = {
-    useMongoClient: true,
+  //  useMongoClient: true,
     autoIndex: false, // Don't build indexes
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
     reconnectInterval: 500, // Reconnect every 500ms

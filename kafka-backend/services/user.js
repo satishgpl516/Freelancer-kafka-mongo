@@ -23,7 +23,7 @@ function login(msg, callback){
             else {
                         console.log("login successful....");
                         console.log(user.local.email);
-                        res.code = "200";
+                        user.status = "201";
                         res.value = "Success Login";
                         callback(null, user);
                     }
@@ -119,55 +119,56 @@ function getUserDetails(msg, callback){
 
 function signup(msg, callback){
 
-    var res={}
-    var newUser = new User();
-    var hash = bcrypt.hashSync(msg.user.password, 10);
+    var reqPassword = msg.user.password;
+    console.log("msg value",msg);
+    var reqUsername = msg.user.username;
+    var reqEmail = msg.user.email;
+    var  res= {};
 
-    newUser.password = hash;
-    newUser.firstname = msg.user.firstName;
-    newUser.lastname = msg.user.lastName;
-    newUser.email = msg.user.email;
-
-    var userLog = new UserLog();
-
-    userLog.user = msg.user.email;
-
-    newUser.save(function(err){
-
+    User.findOne({'local.email':reqEmail},function(err,user){
         if(err){
             throw err;
-
-            res.code = "401";
-            res.value = "Failed to get user details";
-            callback(null, res);
         }
-        else {
+        else if(user){
+            res.status = 401;
+            console.log("db user",user);
+            res.message= 'This email already exists';
+            callback(null,res);
+            console.log("401 email");
 
-            userLog.save(function(err) {
+        }
+        else{
+            var newUser = new User();
 
-                if (err) {
-                    throw err;
+            newUser.local.id = reqUsername;
+            newUser.local.email = reqEmail;
+            newUser.local.username= reqUsername;
 
-                    res.code = "401";
-                    res.value = "Failed to get user details";
-                    callback(null, res);
+            console.log("new user save");
+
+            bcrypt.hash(reqPassword,10,function (err,hash) {
+                if(err){
+                    res.status = 401;
+                    res.message= 'password encryption failed';
+                    callback(null,res);
+                    console.log("encryption failed");
                 }
-                else {
+                else{
+                    newUser.local.password = hash;
+                    newUser.save(function(err){
+                        if(err)
+                            throw err;
+                        else{
+                                console.log("user saved");
+                                res.code = 201;
+                                res.message= 'user saved successfully';
+                                callback(null,res);
+                        }
 
-                    var fs = require('fs');
-                    var splitemail = msg.user.email.split('.')[0];
-                    var dir = './public/uploads/' + splitemail;
-
-                    if (!fs.existsSync(dir)) {
-
-                        fs.mkdirSync(dir);
-                    }
-                    res.code = "200";
-
-                    callback(null, res);
+                    });
                 }
-
             });
+
         }
 
     });
