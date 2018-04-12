@@ -41,7 +41,7 @@ class UpdateProfile extends Component{
         console.log(values);
         this.props.updateProfile(values);
 
-        this.props.uploadImage(values);
+       // this.props.uploadImage(values);
 
     }
     customFileInput = (field) => {

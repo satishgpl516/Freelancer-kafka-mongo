@@ -1,8 +1,9 @@
 
 var User = require('../models/User');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 
 var File = require('../models/Files');
+var UserProfile = require('../models/UserProfile');
 
 var UserLog = require('../models/UserLog');
 
@@ -125,7 +126,7 @@ function signup(msg, callback){
     var reqEmail = msg.user.email;
     var  res= {};
 
-    User.findOne({'local.email':reqEmail},function(err,user){
+    User.findOne({'local.username':reqUsername},function(err,user){
         if(err){
             throw err;
         }
@@ -179,25 +180,22 @@ function signup(msg, callback){
 function updateUser(msg, callback) {
 
     var res={}
-    var firstname = msg.userdata.firstname;
-    var lastname = msg.userdata.lastname;
-    var contact = msg.userdata.contactno;
-    var interests = msg.userdata.interests;
-    var email = msg.email;
+    var firstname = msg.user.firstname;
+    var lastname = msg.user.lastname;
+    var mobile = msg.user.mobile;
+    var skills = msg.user.skills;
+    var aboutme = msg.user.aboutme;
+    var username = msg.username;
 
 
-    User.update({'email':email},{'firstname': firstname, 'lastname':lastname,
-        'contactno':contact, 'interests':interests}, function (err) {
+    UserProfile.update({'username':username},{'firstname': firstname, 'lastname':lastname,
+        'mobile':mobile, 'skills':skills, 'aboutme':aboutme}, function (err) {
         if(err){
-            console.log(err);
-            res.code = "401";
-            callback(null, res);
+            throw err;
         }
         else
         {
-
-            res.code = "200";
-
+            res.code = 201;
             callback(null, res);
 
         }

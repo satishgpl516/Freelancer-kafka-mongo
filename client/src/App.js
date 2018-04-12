@@ -26,7 +26,7 @@ class App extends Component {
 
   render() {
         //var logStat = this.props.user.isLoggedIn;
-      var logStat = localStorage.getItem('user');
+      var logStat = localStorage.getItem('isLoggedIn');
       console.log("new:",logStat);
 
       //  console.log(this.props.user.isLoggedIn);
@@ -36,7 +36,13 @@ class App extends Component {
         <Router  history = {history}>
             <Switch>
 
-                    <Route path = "/login" component={Login}/>
+                <Route path="/login" render={() => (
+                    !logStat ? (
+                        <Login/>
+                    ) : (
+                        <Redirect to="/Dashboard"/>
+                    )
+                )}/>
                     <Route path = "/signup" component={Signup}/>
                     <PrivateRoute path = "/dashboard" component = {Dashboard} />
                     <PrivateRoute path = "/post-project" component = {Postproject} />
@@ -44,7 +50,13 @@ class App extends Component {
                     <PrivateRoute exact path ="/project-details/:id" render = {(props) => <ProjectDetails id = {props.match.params.id}/>} />
                     <PrivateRoute path = "/user-profile/" component = {UserProfile}/>
                     <PrivateRoute path = "/getuserposted/" component = {UserPosted}/>
-                    <Route path="/" component={Home} />
+                <Route path="/" render={() => (
+                    !logStat ? (
+                        <Home />
+                    ) : (
+                        <Redirect to="/dashboard"/>
+                    )
+                )}/>
 
 
             </Switch>

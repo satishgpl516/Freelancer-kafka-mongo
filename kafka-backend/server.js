@@ -2,12 +2,26 @@ var connection =  new require('./kafka/Connection');
 var user = require('./services/user');
 var file = require('./services/file');
 var group = require('./services/group');
+var mongoose = require('mongoose');
 
 //var topic_name = 'login';
 var consumer = connection.getConsumer();
 var producer = connection.getProducer();
 
 console.log('server is running');
+
+var options = {
+    //  useMongoClient: true,
+    autoIndex: false, // Don't build indexes
+    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+    reconnectInterval: 500, // Reconnect every 500ms
+    poolSize: 20, // Maintain up to 10 socket connections
+    // If not connected, return errors immediately rather than waiting for reconnect
+    bufferMaxEntries: 0
+};
+
+mongoose.connect( 'mongodb://test:pass@ds014388.mlab.com:14388/freelancer', options); // connect to our database
+
 consumer.on('message', function (message) {
 
 
@@ -31,7 +45,11 @@ consumer.on('message', function (message) {
                 return;
             });
             break;
-        case 'signup':
+        case 'updateuser':
+            user.updateUser(data.data, function(err,res){
+                response(data,res);
+                return;
+            })
             break;
 
     }

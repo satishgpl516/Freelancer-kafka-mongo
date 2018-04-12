@@ -7,7 +7,8 @@ module.exports = {
        // 'freelancer-shard-00-01-aijjq.mongodb.net:27017,' +
        // 'freelancer-shard-00-02-aijjq.mongodb.net:27017/freelancer' +
        // '?ssl=true&replicaSet=freelancer-shard-0&authSource=admin'
-       mongoURI : 'mongodb://localhost/freelancer'
+      // mongoURI : 'mongodb://localhost/freelancer'
+       mongoURI :   'mongodb://test:pass@ds014388.mlab.com:14388/freelancer'
    },
     facebookAuth: {
         clientID: '1925142617796864',

@@ -98,17 +98,25 @@ router.post('/project',function(req,res) {
 
     let proQuery = "INSERT INTO projects (projectname, projectdescription, projectskills ,projectowner , projectrange) VALUES ('"+ proname+"', '"+prodesciption+"', '"+proskills+"', '"+proowner+"','"+prorange+"');";
 
-    console.log("Posting a Project Query" ,proQuery);
-    mysql.executeQuery(function (err, result) {
+
+    kafka.make_request('postproject',{"project":req.body,"username":req.user.username}, function(err,results) {
+
+        console.log('in result');
+        console.log(results);
         if (err) {
-            res.status(401).json({message: "post project failed"});
+            res.status(401).json({message: "unexpected error occurred"});
         }
         else {
-                res.status(201).json({message:"Project posted successfully"});
-                console.log("Inserted Successfully");
-        }
+            if (results.code === 201) {
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "User Details Saved successfully"});
+            }
+            else {
+                res.status(401).json({message: "post project failed"});
 
-    },proQuery);
+            }
+        }
+    });
 
 });
 
@@ -202,52 +210,6 @@ router.get('/projectdetails',function(req,res){
 /* Get user Signup */
 router.post('/signup', function (req, res) {
 
-
-  //  var reqPassword = saltHashPassword(req.body.password);
-  //  console.log("password: "+reqPassword.passwordHash);
-  //   var reqPassword = req.body.password;
-  //   var reqUsername = req.body.username;
-  //   var reqemail = req.body.email;
-  //
-  //   User.findOne({'local.email':reqemail},function(err,user){
-  //       if(err){
-  //           throw err;
-  //       }
-  //       else if(user){
-  //           res.status(401).json({message: 'This email already exists'})
-  //       }
-  //       else{
-  //           var newUser = new User();
-  //
-  //           newUser.local.id = reqUsername;
-  //           newUser.local.email = reqemail;
-  //           newUser.local.username= reqUsername;
-  //
-  //           bcrypt.hash(reqPassword,saltRounds,function (err,hash) {
-  //               if(err){
-  //                   res.status(401).json({message:'encryption failed'})
-  //               }
-  //               else{
-  //                   newUser.local.password = hash;
-  //                   newUser.save(function(err){
-  //                       if(err)
-  //                           throw err;
-  //                       else{
-  //                           req.login(newUser, function(err) {
-  //                               if (err) {
-  //                                   console.log(err);
-  //                               }
-  //                               res.status(201).json({message:'user saved successfully'});
-  //                           });
-  //                       }
-  //
-  //                   });
-  //               }
-  //           });
-  //
-  //       }
-  //
-  //   })
     kafka.make_request('signup',{"user":req.body}, function(err,results){
 
         console.log('in result');
@@ -281,29 +243,26 @@ router.post('/signup', function (req, res) {
 
 router.post('/userProfile',function(req, res) {
     console.log(req.body)
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var mobile = req.body.mobile;
-    var skills = req.body.skills;
-    var email = req.body.email;
-    var company = req.body.company;
-    var aboutme = req.body.aboutme;
-    var username = req.user;
+    console.log("user",req.user);
 
-    var updateUser = "UPDATE profiledetails set firstname='" + firstname + "' , lastname= '" + lastname +"', skills= '"+ skills
-        + "',mobile='" + mobile + "', aboutme= '" + aboutme +"' where username='"+ username + "';";
+    kafka.make_request('updateuser',{"user":req.body,"username":req.user.username}, function(err,results) {
 
-    console.log("Update Query is:" + updateUser);
-
-    mysql.executeQuery(function (err) {
+        console.log('in result');
+        console.log(results);
         if (err) {
-            console.log(err);
-            res.status(401).json({message: "update query failed"});
+            res.status(401).json({message: "unexpected error occurred"});
         }
         else {
-            res.status(201).json({message: "update query successful"});
+            if (results.code === 201) {
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "User Details Saved successfully"});
+            }
+            else {
+                res.status(401).json({message: "profile update failed"});
+
+            }
         }
-    }, updateUser);
+    });
 
 });
 

@@ -4,17 +4,18 @@ function ConnectionProvider() {
     this.getConsumer = function() {
         if (!this.kafkaConsumerConnection) {
 
-            this.client = new kafka.Client("localhost:2181");
+            this.client = new kafka.Client('ec2-54-193-115-70.us-west-1.compute.amazonaws.com:2181');
             this.kafkaConsumerConnection = new kafka.HighLevelConsumer(this.client,[
                 { topic: 'login',partition: 0 },
                  // { topic: 'getuser', partition: 0 },
                  // { topic: 'upload', partition: 0 },
-                 { topic: 'signup', partition: 0 }
+                 { topic: 'signup', partition: 0 },
+                { topic: 'updateuser', partition: 0 }
                 // { topic: 'getfiles', partition: 0 },
                 // { topic: 'deletefile', partition: 0 },
                 // { topic: 'makefolder', partition: 0 },
                 // { topic: 'sharefile', partition: 0 },
-                // { topic: 'updateuser', partition: 0 },
+                // ,
                 // { topic: 'starfile', partition: 0 },
                 // { topic: 'getgroups', partition: 0 },
                 // { topic: 'deletegroup', partition: 0 },
@@ -35,7 +36,7 @@ function ConnectionProvider() {
     this.getProducer = function() {
 
         if (!this.kafkaProducerConnection) {
-            this.client = new kafka.Client("localhost:2181");
+            this.client = new kafka.Client('ec2-54-193-115-70.us-west-1.compute.amazonaws.com:2181');
             var HighLevelProducer = kafka.HighLevelProducer;
             this.kafkaProducerConnection = new HighLevelProducer(this.client);
             //this.kafkaConnection = new kafka.Producer(this.client);

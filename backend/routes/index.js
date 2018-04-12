@@ -6,7 +6,7 @@ router.get('/', function(req, res, next){
    console.log(req.user);
    console.log(req.isAuthenticated());
     console.log(req.session.username);
-   // res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express' });
     res.status(201).send("success");
 });
 
