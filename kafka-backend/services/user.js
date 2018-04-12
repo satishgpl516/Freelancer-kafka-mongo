@@ -6,6 +6,7 @@ var File = require('../models/Files');
 var UserProfile = require('../models/UserProfile');
 
 var UserLog = require('../models/UserLog');
+var mongoose = require('mongoose');
 
 function login(msg, callback){
 
@@ -187,20 +188,53 @@ function updateUser(msg, callback) {
     var aboutme = msg.user.aboutme;
     var username = msg.username;
 
+    var userProfile = new UserProfile();
 
-    UserProfile.update({'username':username},{'firstname': firstname, 'lastname':lastname,
-        'mobile':mobile, 'skills':skills, 'aboutme':aboutme}, function (err) {
+    userProfile.firstname = firstname;
+    userProfile.lastname = lastname;
+    userProfile.mobile = mobile;
+    userProfile.skills = skills;
+    userProfile.aboutme = aboutme;
+    userProfile.username = username;
+    userProfile.imagepath = "thispath"
+
+   // mongoose.connection.db.collection('userprofile').insert({firstname: firstname, lastname: lastname});
+
+    UserProfile.findOne({'projectowner':username},function(err,user){
         if(err){
             throw err;
         }
-        else
-        {
-            res.code = 201;
-            callback(null, res);
+        else if(user){
+            UserProfile.update({'projectowner':username},{'firstname': firstname, 'lastname':lastname,
+                'mobile':mobile, 'skills':skills, 'aboutme':aboutme}, function (err) {
+                if(err){
+                    throw err;
+                }
+                else
+                {
+                    res.code = 201;
+                    res.message= "user profile updated successfully"
+                    callback(null, res);
+                }
 
+            });
+
+        }
+        else{
+            userProfile.save(function(err){
+                if(err)
+                    throw err;
+                else{
+                    console.log("user details saved");
+                    res.code = 201;
+                    res.message= 'user details successfully';
+                    callback(null,res);
+                }
+            });
         }
 
     });
+
 
 }
 

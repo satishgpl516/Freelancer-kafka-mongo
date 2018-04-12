@@ -90,13 +90,6 @@ router.post('/project',function(req,res) {
     console.log(req.session);
     console.log(req.isAuthenticated());
     console.log(req.user);
-    let proname = req.body.proName;
-    let prodesciption = req.body.proDescr;
-    let prorange = req.body.proPayRange;
-    let proowner = req.user;
-    let proskills = req.body.proSkills;
-
-    let proQuery = "INSERT INTO projects (projectname, projectdescription, projectskills ,projectowner , projectrange) VALUES ('"+ proname+"', '"+prodesciption+"', '"+proskills+"', '"+proowner+"','"+prorange+"');";
 
 
     kafka.make_request('postproject',{"project":req.body,"username":req.user.username}, function(err,results) {
@@ -109,7 +102,7 @@ router.post('/project',function(req,res) {
         else {
             if (results.code === 201) {
                 console.log("Inside the success criteria");
-                res.status(201).json({message: "User Details Saved successfully"});
+                res.status(201).json({message: "project posted Saved successfully"});
             }
             else {
                 res.status(401).json({message: "post project failed"});
@@ -125,26 +118,10 @@ router.get('/projects',function(req,res){
      if(req.isAuthenticated()) {
          console.log("Authenticated:", req.isAuthenticated());
 
-         let proGetQuery = "SELECT * FROM projects ;"
-         console.log("Posting a select Project Query", proGetQuery);
-         mysql.fetchData(function (err, results) {
-             if (err)
-                 throw(err);
-             else if (results.length === 0) {
-                 console.log("no user found");
-                 res.status(401).json({message: 'No Projects found'});
-             }
-             if (results.length > 0) {
-                 var projects = results;
-                 console.log(projects[0]);
-                 res.status(201).json({projects: projects});
-             }
+     kafka.make_request('postproject',function(err,res){
 
-             // }
-             // else{
-             //     res.status(401).json({message: "User is not Authenticated"});
-             // }
-         }, proGetQuery);
+     })
+
      }
 
 })
@@ -203,7 +180,7 @@ router.get('/projectdetails',function(req,res){
         // }
     },proQuery);
 
-})
+});
 
 
 

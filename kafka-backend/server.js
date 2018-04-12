@@ -3,6 +3,7 @@ var user = require('./services/user');
 var file = require('./services/file');
 var group = require('./services/group');
 var mongoose = require('mongoose');
+var project = require('./services/project.js');
 
 //var topic_name = 'login';
 var consumer = connection.getConsumer();
@@ -47,6 +48,18 @@ consumer.on('message', function (message) {
             break;
         case 'updateuser':
             user.updateUser(data.data, function(err,res){
+                response(data,res);
+                return;
+            })
+            break;
+        case 'postproject':
+            project.postProject(data.data, function(err,res){
+                response(data,res);
+                return;
+            })
+            break;
+        case 'postproject':
+            project.postProject(data.data, function(err,res){
                 response(data,res);
                 return;
             })

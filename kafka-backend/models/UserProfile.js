@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
-var UserProfile = mongoose.Schema({
-    username: String,
+var UserProfileSchema = mongoose.Schema({
+    projectowner: String,
     firstname: String,
     lastname: String,
     aboutme: String,
@@ -12,4 +12,4 @@ var UserProfile = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('UserProfile',UserProfile);
+module.exports = mongoose.model('UserProfile',UserProfileSchema);

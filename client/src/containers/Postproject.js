@@ -25,6 +25,14 @@ class Postproject extends Component{
         )
 
     }
+    renderSelect(field){
+        return(
+            <div>
+                <select {...field.input} {...field}/>
+                {field.touched && field.error && <div className="error">{field.error}</div>}
+            </div>
+            );
+    }
     onSubmit(values){
         console.log(values);
         this.props.doPostProject(values);
@@ -49,15 +57,7 @@ class Postproject extends Component{
 
     render(){
         const { handleSubmit, load, pristine, reset, submitting } = this.props;
-        const proOptions = [{
-            value :"10-30",label : 'Micro Project($10-30 USD)',
-            value:"30-250", label : 'Simple project ($30 - 250 USD)',
-            value:"1500-1000", label : 'Medium project ($1500 - 3000 USD)',
-            value:"3000-5000", label :'Large project ($3000 - 5000 USD)',
-            value:"5000-10000", label :  'Larger project ($5000 - 10000 USD)',
-            value:"10000-20000", label : 'Very Large project ($10000 - 20000 USD)',
 
-        }]
         return(<div>
             <div className="container">
                 <div className="post-project-main">
@@ -130,9 +130,9 @@ class Postproject extends Component{
                                 </div>
                                 <div className="form-group">
                                     <legend className="post-project-form-pay-price-label" >What is your estimated budget?</legend>
-                                    <Field name ="proPayRange" component="select" className="custom-select my-1 mr-sm-2 large-input" >
-                                        <option/>
-                                        <option defaultValue="10-30" >Micro Project($10-30 USD)...</option>
+                                    <Field name ="proPayRange" component={this.renderSelect} className="custom-select my-1 mr-sm-2 " >
+                                        <option></option>
+                                        <option defaultValue="10-30" >Micro Project($10-30 USD)</option>
                                         <option value="30-250">Simple project ($30 - 250 USD)</option>
                                         <option value="1500-1000">Medium project ($1500 - 3000 USD)</option>
                                         <option value="3000-5000">Large project ($3000 - 5000 USD)</option>

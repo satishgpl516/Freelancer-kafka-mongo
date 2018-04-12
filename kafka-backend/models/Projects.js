@@ -11,4 +11,4 @@ var projectDetails = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('ProjectDetails',projectDetails);
+module.exports = mongoose.model('Project',projectDetails);
