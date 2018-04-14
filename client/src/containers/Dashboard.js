@@ -22,27 +22,27 @@ class Dashboard extends  Component{
         this.props.doLogout();
     }
     displayProjects(){
-        console.log(this.props.projects);
+        console.log("this project",this.props.projects);
         return _.map(this.props.projects, proj => {
-            console.log(proj.projectid, proj.projectname);
+            console.log(proj._id, proj.projectname);
             return (
 
-                <tr className="ProjectTable-row project-details" key={proj.projectid+"row"}>
-                    <td className=" ProjectTable-cell ProjectTable-summaryColumn title-col" key={proj.projectid+"data"}>
-                        <h2 className="ProjectTable-title" key={proj.projectid+"h2"}>
-                            <span className= "ProjectTable-titleIcon" key={proj.projectid+"projname"}>
-                                <Link to={`/project-details/${proj.projectid}`} key={proj.projectid+"link"} >{proj.projectname}</Link>
+                <tr className="ProjectTable-row project-details" key={proj._id+"row"}>
+                    <td className=" ProjectTable-cell ProjectTable-summaryColumn title-col" key={proj._id+"data"}>
+                        <h2 className="ProjectTable-title" key={proj._id+"h2"}>
+                            <span className= "ProjectTable-titleIcon" key={proj._id+"projname"}>
+                                <Link to={`/project-details/${proj._id}`} key={proj._id+"link"} >{proj.projectname}</Link>
                             </span>
                         </h2>
-                        <p className="ProjectTable-description" key={proj.projectid+"description"} >{proj.projectdescription}</p>
-                        <span className="ProjectTable-skills" key={proj.projectid+"skilss"}>{proj.projectskills} </span>
+                        <p className="ProjectTable-description" key={proj._id+"description"} >{proj.projectdescription}</p>
+                        <span className="ProjectTable-skills" key={proj._id+"skilss"}>{proj.projectskills} </span>
                     </td>
-                    <td className=" ProjectTable-cell ProjectTable-bidsColumn bids-col " key={proj.projectid+"bidsdata"}>
-                        <div className="bids-col-inner" key={proj.projectid+"bids"}>{proj.projectid}</div>
+                    <td className=" ProjectTable-cell ProjectTable-bidsColumn bids-col " key={proj._id+"bidsdata"}>
+                        <div className="bids-col-inner" key={proj._id+"bids"}>{proj._id}</div>
                     </td>
-                    <td className=" ProjectTable-cell ProjectTable-startedColumn started-col" key={proj.projectid+"time"}>6d 23h</td>
-                    <td className=" ProjectTable-cell ProjectTable-priceColumn price-col" key={proj.projectid+"price"}>1627</td>
-                    <td className=" ProjectTable-cell ProjectTable-priceColumn" key={proj.projectid+"bidbtn"}>
+                    <td className=" ProjectTable-cell ProjectTable-startedColumn started-col" key={proj._id+"time"}>6d 23h</td>
+                    <td className=" ProjectTable-cell ProjectTable-priceColumn price-col" key={proj._id+"price"}>1627</td>
+                    <td className=" ProjectTable-cell ProjectTable-priceColumn" key={proj._id+"bidbtn"}>
                         <Link to = '/projectdetails' className= "btn btn-primary ">Bid</Link>
                     </td>
                 </tr>

@@ -89,10 +89,10 @@ router.get('/biddetails',function (req,res) {
 router.post('/project',function(req,res) {
     console.log(req.session);
     console.log(req.isAuthenticated());
-    console.log(req.user);
+    console.log("new user",req.user);
 
 
-    kafka.make_request('postproject',{"project":req.body,"username":req.user.username}, function(err,results) {
+    kafka.make_request('postproject',{"project":req.body,"username":req.user.local.username}, function(err,results) {
 
         console.log('in result');
         console.log(results);
@@ -118,9 +118,25 @@ router.get('/projects',function(req,res){
      if(req.isAuthenticated()) {
          console.log("Authenticated:", req.isAuthenticated());
 
-     kafka.make_request('postproject',function(err,res){
+     kafka.make_request('getprojects',{"project":req.body},function(err,results){
+         console.log('in result');
+         console.log(results);
+         if (err) {
+             res.status(401).json({message: "unexpected error occurred"});
+         }
+         else {
+             if (results.code === 201) {
+                 console.log("Inside the success criteria");
+                 res.status(201).json({projects: results.data});
+             }
+             else {
+                 res.status(401).json({message: "post project failed"});
 
-     })
+             }
+         }
+
+
+     });
 
      }
 
@@ -129,29 +145,27 @@ router.get('/projects',function(req,res){
 
 router.get('/postedprojects',function(req,res){
     // if(req.isAuthenticated()){
-        let usern = req.session.passport.user;
         console.log("Authenticated:",req.isAuthenticated());
-        console.log("username:",usern);
-        let proGetQuery = "select * from projects where projectowner='"+usern+"'";
-        console.log("Posting a select Project Query" ,proGetQuery);
-        mysql.fetchData(function(err,results) {
-            if (err)
-                throw(err);
-            else if (results.length === 0) {
-                console.log("no user found");
-                res.status(401).json({message: 'No Projects found'});
-            }
-            if (results.length > 0) {
-                var projects = results;
-                res.status(201).json({projects: projects});
-            }
-        },proGetQuery);
 
-    // }
-    // else{
-    //     res.status(401).json({message: "User is not Authenticated"});
-    // }
-    //
+        kafka.make_request('postedprojects',{"username":req.user.local.username},function(err,results){
+            console.log('in result');
+            console.log(results);
+            if (err) {
+                res.status(401).json({message: "unexpected error occurred"});
+            }
+            else {
+                if (results.code === 201) {
+                    console.log("Inside the success criteria");
+                    res.status(201).json({projects: results.data});
+                }
+                else {
+                    res.status(401).json({message: "user posted projects not available"});
+
+                }
+            }
+
+        });
+
 
 });
 
@@ -159,26 +173,28 @@ router.get('/projectdetails',function(req,res){
     console.log(req.user);
     // if(req.isAuthenticated()){
     let projectid = req.query.pid;
-    let proQuery = "SELECT * FROM projects where Projectid = '"+projectid+"';";
-    console.log("Posting a select Project Query" ,proQuery);
-    mysql.fetchData(function(err,results) {
-        if (err)
-            throw(err);
-        else if (results.length === 0) {
-            console.log("no user found");
-            res.status(401).json({message: 'User Project not found'});
+    console.log("project id",projectid);
+    kafka.make_request('projectdetails',{"project":projectid},function(err,results){
+        console.log('in result');
+        console.log(results);
+        if (err) {
+            res.status(401).json({message: "unexpected error occurred"});
         }
-        if (results.length > 0) {
-            var project = results[0];
-            console.log("resProject:",project);
-            res.status(201).json({projects: project});
+        else {
+            if (results.code === 201) {
+                console.log("Inside the success criteria");
+                res.status(201).json({projects: results.data, bids: results.bids});
+            }
+            else {
+                res.status(401).json({message: "project details not retrieved"});
+
+            }
         }
 
-        // }
-        // else{
-        //     res.status(401).json({message: "User is not Authenticated"});
-        // }
-    },proQuery);
+
+    });
+
+
 
 });
 
@@ -222,7 +238,7 @@ router.post('/userProfile',function(req, res) {
     console.log(req.body)
     console.log("user",req.user);
 
-    kafka.make_request('updateuser',{"user":req.body,"username":req.user.username}, function(err,results) {
+    kafka.make_request('updateuser',{"user":req.body,"username":req.user.local.username}, function(err,results) {
 
         console.log('in result');
         console.log(results);

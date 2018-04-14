@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import SignUp from './Signup';
 import HomePage from './Home';
-import Logo from "./logo.svg";
-import "./Header.css";
+import Logo from "../styles/logo.svg";
+import "../styles/Header.css";
 import {Route, withRouter} from 'react-router-dom';
 
 const Header = () =>(

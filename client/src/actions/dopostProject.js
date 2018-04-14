@@ -8,7 +8,7 @@ export  function doPostProject(values){
         method: "post",
         data: values,
         withCredentials: true
-    })
+    });
     request.then(function(res) {
         if(res.status === 201){
             alert("project posted successfully")

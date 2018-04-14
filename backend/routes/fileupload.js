@@ -29,7 +29,7 @@ router.post('/upload',upload.single('myfile'), function (req, res, next) {
     var filepath =  req.file.destination+ filename;
     console.log(filepath);
 
-    var updateQuery="UPDATE profiledetails SET imagepath ='"+ filepath + "'where username= '"+req.user+"';";
+    var updateQuery="UPDATE profiledetails SET imagepath ='"+ filepath + "'where username= '"+req.user.local.username+"';";
 
     console.log("Query is:"+updateQuery);
 

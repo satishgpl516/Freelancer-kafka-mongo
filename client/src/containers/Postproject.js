@@ -1,9 +1,20 @@
 import React, {Component } from 'react';
 import {Field, reduxForm } from "redux-form";
 import {Link } from 'react-router-dom';
+import {bindActionCreators} from 'redux';
 import {doPostProject} from "../actions/dopostProject";
 import {connect} from "react-redux";
 import '../styles/style.css';
+import MultiSelect from 'react-widgets/lib/Multiselect';
+import 'react-widgets/dist/css/react-widgets.css'
+import {uploadImage} from "../actions/uploadImage";
+
+const renderMultiselect = ({ input, ...rest }) =>
+    <MultiSelect {...input}
+                 onBlur={() => input.onBlur()}
+                 value={input.value || []} // requires value to be an array
+                 {...rest}
+                 />
 
 class Postproject extends Component{
     constructor(props){
@@ -33,9 +44,11 @@ class Postproject extends Component{
             </div>
             );
     }
+
     onSubmit(values){
         console.log(values);
         this.props.doPostProject(values);
+        this.props.uploadImage(values);
     }
     renderDescr(field) {
         const {meta: {touched, error}} = field;
@@ -53,10 +66,18 @@ class Postproject extends Component{
         )
     }
 
+    getSkills = (event, newValue, previousValue, name) => {
+       return  console.log(newValue)
+    }
+
+    customFileInput = (field) => {
+        delete field.input.value; // <-- just delete the value property
+        return <input type="file" id="file" {...field.input} />;
+    };
 
 
     render(){
-        const { handleSubmit, load, pristine, reset, submitting } = this.props;
+        const { handleSubmit,onChange, load, pristine, reset, submitting } = this.props;
 
         return(<div>
             <div className="container">
@@ -97,22 +118,24 @@ class Postproject extends Component{
                                 </div>
                                 <div className="post-project-file-upload-container" >
                                     <div className="post-project-upload">
-                                        <button type="button" className="btn btn-secondary">
-                                            <span className="glyphicon glyphicon-star" aria-hidden="true">
+                                        <button type="button" className="btn btn-secondary" >
+                                            <span className="glyphicon glyphicon-star" aria-hidden="true" >
                                             </span> Upload Files
                                         </button>
                                         <p className="post-project-form-desc-sub">Drag & drop any images or documents that might be helpful in explaining your project brief here.</p>
-
                                     </div>
+                                    <Field name="newfile"  component={this.customFileInput}/>
                                 </div>
                                 <div className="form-group">
                                     <legend className="post-project-form-skill" >What skills are required?</legend>
                                     <p className="post-project-form-desc-sub">Enter up to 5 skills that best describe your project. Freelancers will use these skills to find projects
                                         they are most interested and experienced in.</p>
-                                    <Field name="proSkills"
-                                           className="form-control form-control-lg post-project-form-skill  "
-                                           placeholder="What skills are required?"
-                                           component={this.renderField}
+                                    <Field
+                                        name="proSkills"
+                                        component={renderMultiselect}
+                                        defaultValue={[]}
+                                         data={[ 'Node.js', 'React', 'Angular','wordpress','php','Java','Spring MVC' ]}
+                                        onChange = {this.getSkills}
                                     />
                                 </div>
                                     <legend className="post-project-form-pay" >How do you want to pay?</legend>
@@ -132,7 +155,7 @@ class Postproject extends Component{
                                     <legend className="post-project-form-pay-price-label" >What is your estimated budget?</legend>
                                     <Field name ="proPayRange" component={this.renderSelect} className="custom-select my-1 mr-sm-2 " >
                                         <option></option>
-                                        <option defaultValue="10-30" >Micro Project($10-30 USD)</option>
+                                        <option value="10-30" >Micro Project($10-30 USD)</option>
                                         <option value="30-250">Simple project ($30 - 250 USD)</option>
                                         <option value="1500-1000">Medium project ($1500 - 3000 USD)</option>
                                         <option value="3000-5000">Large project ($3000 - 5000 USD)</option>
@@ -166,14 +189,16 @@ function validate(values){
     const errors = {};
     //validate input from values
 
+    console.log("hello",values.proSkills);
+
 
     if(!values.proName || values.proName.length < 10 ){
         errors.proName = "Please enter atleast 10 characters\n ";
     }
 
 
-    if(!values.proDescr|| values.proDescr.length<30 || values.proDescr.length>140){
-        errors.proDescr = "Please enter between 30  and 150 characters\n ";
+    if(!values.proDescr|| values.proDescr.length<30 || values.proDescr.length>800){
+        errors.proDescr = "Please enter between 30  and 800 characters\n ";
     }
 
     if(!values.proSkills){
@@ -185,7 +210,16 @@ function validate(values){
     return errors;
 }
 
+function mapDispatchToProps(dispatch){
+    return {
+        ...bindActionCreators({
+            uploadImage, doPostProject
+        },dispatch)
+    }
+}
+
+
 export default reduxForm({
     validate,
     form: 'PostProjectForm'
-}) (connect(null,{doPostProject})(Postproject));
+}) (connect(null,mapDispatchToProps)(Postproject));

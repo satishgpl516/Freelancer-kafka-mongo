@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Logo from "../logo.svg";
-import "./Header.css";
+import "../styles/Header.css";
 import {connect} from "react-redux";
 import {doLogout} from "../actions/doLogout";
 

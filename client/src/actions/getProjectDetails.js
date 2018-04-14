@@ -5,7 +5,7 @@ import {history} from "../containers/History";
 
 export function getProjectDetails(pid) {
     console.log(pid);
-    const request = axios.get(`${ROOT_URL}/users/projectdetails?pid=${pid}`);
+    const request = axios.get(`${ROOT_URL}/users/projectdetails?pid=${pid}`,{withCredentials:true});
 
     request.then(function(res) {
         if(res.status = 201){

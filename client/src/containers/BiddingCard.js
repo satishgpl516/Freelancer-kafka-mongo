@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./BidCard.css";
+import "../styles/BidCard.css";
 //import profile from "./profile.png";
 import {Link} from 'react-router-dom';
 

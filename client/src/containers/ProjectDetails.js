@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {getProjectDetails} from "../actions/getProjectDetails";
 import {getbidDetails} from "../actions/getbidDetails";
 import DashBoardHeader from './DashboardHeader';
-import "./ProjectStyle.css"
+import "../styles/ProjectStyle.css"
 import BiddingCard from "./BiddingCard";
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
@@ -16,17 +16,20 @@ constructor(props){
     this.state= {
         pid: this.props.id
     };
+
 }
 
 
 componentDidMount(){
     // action calls for getting project details and Bid details using id
     this.props.getProjectDetails(this.state.pid);
-    this.props.getbidDetails(this.state.pid);
+    //this.props.getbidDetails(this.state.pid);
 
 }
 
     render(){
+        console.log("Inside the Projects: ",this.props.id);
+
 
         let projectName = "Freelancer"; //_.map(this.props.data,'ProjectName');
         let no_of_bids  = 3; //this.props.bid_data.length;
@@ -35,7 +38,7 @@ componentDidMount(){
         let min_range =437;
         let description = this.props.data.projectdescription;
         let skills =   this.props.data.projectskills;
-        let project_id = this.props.data.projectid;
+        let project_id = this.props.id;
         let employer_details = this.props.data.projectowner;
         let top_five = 5;
         let currency = '$';
@@ -152,7 +155,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         ...bindActionCreators({
-            getbidDetails, getProjectDetails
+              getProjectDetails
         },dispatch)
     }
 }

@@ -47,7 +47,15 @@ class App extends Component {
                     <PrivateRoute path = "/dashboard" component = {Dashboard} />
                     <PrivateRoute path = "/post-project" component = {Postproject} />
                     <PrivateRoute path ="/update-profile" component = {UpdateProfile}/>
-                    <PrivateRoute exact path ="/project-details/:id" render = {(props) => <ProjectDetails id = {props.match.params.id}/>} />
+                    {/*<PrivateRoute path = "/project-details/:pid" render = {(props) => (<ProjectDetails id = {this.props.match.params.pid}/>)}/>*/}
+                    <Route exact path = "/project-details/:pid" render = {(props) => {
+                    return logStat ? (
+                        <ProjectDetails id={props.match.params.pid}/>
+                    ) : (
+                        <Redirect to="/login"/>
+                    )
+                }}/>
+
                     <PrivateRoute path = "/user-profile/" component = {UserProfile}/>
                     <PrivateRoute path = "/getuserposted/" component = {UserPosted}/>
                 <Route path="/" render={() => (

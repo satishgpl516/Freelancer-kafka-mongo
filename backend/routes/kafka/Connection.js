@@ -4,7 +4,7 @@ function ConnectionProvider() {
     this.getConsumer = function(topic_name) {
         if (!this.kafkaConsumerConnection) {
 
-            this.client = new kafka.Client('ec2-54-193-115-70.us-west-1.compute.amazonaws.com:2181');
+            this.client = new kafka.Client('ec2-54-183-18-85.us-west-1.compute.amazonaws.com:2181');
             this.kafkaConsumerConnection = new kafka.Consumer(this.client,[ { topic: topic_name, partition: 0 }]);
             this.client.on('ready', function () { console.log('client ready!') })
         }
@@ -15,7 +15,7 @@ function ConnectionProvider() {
     this.getProducer = function() {
 
         if (!this.kafkaProducerConnection) {
-            this.client = new  kafka.Client('ec2-54-193-115-70.us-west-1.compute.amazonaws.com:2181');
+            this.client = new  kafka.Client('ec2-54-183-18-85.us-west-1.compute.amazonaws.com:2181');
             var HighLevelProducer = kafka.HighLevelProducer;
             this.kafkaProducerConnection = new HighLevelProducer(this.client);
             //this.kafkaConnection = new kafka.Producer(this.client);
