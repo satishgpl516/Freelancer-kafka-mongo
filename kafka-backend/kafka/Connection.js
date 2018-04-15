@@ -13,7 +13,8 @@ function ConnectionProvider() {
                 {topic:'getprojects',partition: 0},
                  {topic:'projectdetails',partition: 0},
                 {topic:'postedprojects', partition:0},
-                { topic: 'postbid', partition: 0 }
+                { topic: 'postbid', partition: 0 },
+                { topic: 'searchprojects', partition: 0 }
                 // { topic: 'sharefile', partition: 0 },
                 // { topic: 'starfile', partition: 0 },
                 // { topic: 'getgroups', partition: 0 },

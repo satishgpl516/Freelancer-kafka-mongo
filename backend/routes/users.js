@@ -236,6 +236,29 @@ router.get('/postedprojects',function(req,res){
 
 });
 
+router.get('/searchprojects',function(req,res){
+    console.log(req.user);
+    let projectname = req.query.proName;
+    console.log("project name",projectname);
+    kafka.make_request('searchprojects',{'projectname': projectname},function(err,results){
+        console.log('in result');
+        console.log(results);
+        if (err) {
+            res.status(401).json({message: "unexpected error occurred"});
+        }
+        else {
+            if (results.code === 201) {
+                console.log("Inside the success criteria");
+                res.status(201).json({projects: results.data});
+            }
+            else {
+                res.status(401).json({message: "project details not retrieved"});
+            }
+        }
+    });
+
+});
+
 router.get('/projectdetails',function(req,res){
     console.log(req.user);
     // if(req.isAuthenticated()){

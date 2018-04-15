@@ -100,6 +100,33 @@ function getPostedProjects(msg, callback) {
 
 }
 
+function searchProjects(msg, callback) {
+    res = {};
+    var projectname = msg.projectname;
+    console.log("search projects function :", msg);
+    Project.find({'projectname': new RegExp(projectname, 'i')}, function (err, projects) {
+        console.log('search projects results', projects);
+        if (err) {
+            throw err;
+            res.code = 401;
+            res.value = "Failed to Fetch";
+            callback(null, res);
+        }
+        else {
+            if (projects.length > 0) {
+                res.code = 201;
+                res.value = "All Projects";
+                res.data = projects;
+            }
+            else {
+                res.code = 401;
+                res.value = "Failed to fetch"
+            }
+            callback(null, res);
+        }
+    });
+}
+
 
 function getProjectDetails(msg,callback){
 
@@ -206,3 +233,4 @@ exports.allProjects = allProjects;
 exports.postProject = postProject;
 exports.getPostedProjects = getPostedProjects;
 exports.postBid = postBid;
+exports.searchProjects = searchProjects;

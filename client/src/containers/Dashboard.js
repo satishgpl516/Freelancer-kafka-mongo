@@ -6,7 +6,7 @@ import {bindActionCreators} from "redux";
 import {getProjects} from "../actions/getProjects";
 import DashboardHeader from "./DashboardHeader";
 import _ from "lodash";
-
+import {searchProjects} from "../actions/getProjects";
 
 class Dashboard extends  Component{
     constructor(props){
@@ -20,7 +20,10 @@ class Dashboard extends  Component{
         isMouseInside: false,
         projectid: null,
         bidprice: 0,
-        noofdays: 0
+        noofdays: 0,
+        query : null,
+        take:10,
+        skip:0
 
     }
     mouseEnter = () => {
@@ -30,7 +33,19 @@ class Dashboard extends  Component{
         this.setState({ isMouseInside: false });
     }
     componentDidMount(){
-        this.props.getProjects();
+        this.props.getProjects(this.state.skip,this.state.take);
+    }
+    handleInputChange = () => {
+        this.setState({
+            query: this.search.value
+        }, () => {
+            if (this.state.query) {
+                if (this.state.query.length % 2 === 0) {
+                    this.props.searchProjects(this.state.query)
+                }
+            } else if (!this.state.query) {
+            }
+        })
     }
     handleLogout(){
         const user = sessionStorage.getItem('username');
@@ -76,6 +91,7 @@ class Dashboard extends  Component{
                     <div className="section-inner">
                         <h1 className="page-title">Freelance Jobs and Contests</h1>
                         <h2 className="section-heading">Browse Jobs on Freelancer</h2>
+                        <section className="ProjectFilters">
                         <div className="ProjectFilters-search " id= "searchDiv">
                             <form className="fl-form ProjectFilters-row" >
                                 <div className="label-div">
@@ -83,11 +99,53 @@ class Dashboard extends  Component{
                                 </div>
                                 <div className="ProjectFilters-item">
                                     <div className="input-icon">
-                                        <input name="search" type="text" className="form-control default-input" placeholder="search for projects"/>
+                                        <input name="search" type="text" className="form-control default-input"
+                                               ref={input => this.search = input}
+                                               onChange={this.handleInputChange} placeholder="search for projects"/>
                                     </div>
                                 </div>
                             </form>
                         </div>
+                            <div className="ProjectFilters-search " id= "skillsDiv">
+                                <form className="fl-form ProjectFilters-row" >
+                                    <div className="label-div">
+                                        <label className= "ProjectFilters-rowLabel">Skills</label>
+                                    </div>
+                                    <div className="ProjectFilters-item">
+                                        <div className="input-icon">
+                                            <input name=" skills" type="text" className="form-control default-input" placeholder="Search for Skills"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="projectFilters=row">
+                                <div className="projectFilters-secondaryControls">
+                                    <div className="ProjectFilters-quantity">
+                                        <label for="filter-length" className="ProjectFilters-quantityLabel">Results per page</label>
+                                        <select name="filter-length" id="quantity-selector" className="ProjectFilters-quantitySelector default-input" data-id="filter-length">
+                                            <option>5</option>
+                                            <option selected="">10</option>
+                                            <option>20</option>
+                                        </select>
+                                    </div>
+                                    <div className="pagination-buttons">
+                                    <nav aria-label="Page navigation example">
+                                        <ul className="pagination justify-content-center">
+                                            <li className="page-item disabled">
+                                                <a className="page-link" href="#" tabindex="-1">Previous</a>
+                                            </li>
+                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
+                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
+                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                            <li className="page-item">
+                                                <a className="page-link" href="#">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <div className="browse-project-table">
                         <div className="dataTables_wrapper" id="project_table_wrapper">
@@ -127,7 +185,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         ...bindActionCreators({
-            doLogout, getProjects
+            doLogout, getProjects, searchProjects
         },dispatch)
     }
 }
