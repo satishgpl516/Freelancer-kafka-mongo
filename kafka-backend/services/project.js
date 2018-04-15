@@ -126,6 +126,7 @@ function getProjectDetails(msg,callback){
                         callback(null,res);
                     }
                     else{
+                        res.bids={};
                         res.code = 201;
                         res.value = " Project details";
                         res.data = projects;
@@ -148,8 +149,60 @@ function getProjectDetails(msg,callback){
 }
 
 
+function postBid(msg,callback){
+    console.log("msg",msg);
+    var res={};
+    var username = msg.username;
+    var projectid = msg.bid.projectid;
+    var noofdays = msg.bid.Noofdays;
+    var bidprice = msg.bid.BidPrice;
+    var bidtime = new Date();
+    console.log('date',bidtime);
+
+    console.log("Inside postbid",msg);
+    Userbids.find({$and:[{'biddername':username},{'projectid':projectid}]},function(err,userbids){
+        if(err){
+            throw err;
+        }
+        else if(userbids.length >0){
+            console.log("userbids.length",userbids.length);
+            Userbids.update({'biddername':username},{'bidprice':bidprice,'noofdays':noofdays, 'bidtime':bidtime},
+                function(err){
+                    if(err)
+                        throw err;
+                    else{
+                        console.log("userbids created");
+                        res.code=201;
+                        res.message = "userbids update failed";
+                        callback(null,res);
+                    }
+                });
+        }
+        else{
+             var  newuserbids = new Userbids();
+            newuserbids.biddername = username;
+            newuserbids.projectid = projectid;
+            newuserbids.bidprice = bidprice;
+            newuserbids.noofbids = noofdays;
+            newuserbids.bidtime = bidtime;
+            newuserbids.save(function(err){
+                if(err)
+                    throw err
+                else{
+                    res.code = 201;
+                    res.message= "userbid is added succesfully";
+                    callback(null,res);
+                }
+            });
+        }
+    });
+
+
+}
+
 
 exports.getProjectDetails = getProjectDetails;
 exports.allProjects = allProjects;
 exports.postProject = postProject;
 exports.getPostedProjects = getPostedProjects;
+exports.postBid = postBid;

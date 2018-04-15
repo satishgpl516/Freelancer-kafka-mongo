@@ -5,7 +5,7 @@ export function getpostedProjects(){
     const request = axios.get(`${ROOT_URL}/users/postedprojects`, {withCredentials:true});
     request.then(function(res) {
         if(res.status = 201){
-            console.log("project details retrieved successfully")
+            console.log("project details retrieved successfully");
         }
 
     });

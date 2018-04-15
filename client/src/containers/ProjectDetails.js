@@ -17,14 +17,12 @@ constructor(props){
     this.state= {
         pid: this.props.id
     };
-
 }
 
 
 componentDidMount(){
     // action calls for getting project details and Bid details using id
-    this.props.getProjectDetails(this.state.pid);
-    //this.props.getbidDetails(this.state.pid);
+   this.props.getProjectDetails(this.state.pid);
 
 }
     renderField(field){
@@ -44,6 +42,10 @@ componentDidMount(){
         )
 
     }
+    onSubmit(values){
+        values.projectid= this.state.pid;
+        this.props.postBid(values);
+    }
 
     render(){
         const { handleSubmit, load, pristine, reset, submitting } = this.props;
@@ -57,7 +59,7 @@ componentDidMount(){
         let skills =   this.props.data.projectskills;
         let project_id = this.props.id;
         let employer_details = this.props.data.projectowner;
-        let top_five = 5;
+        let top_five = 0;
         let currency = '$';
         console.log("project details",this.props.data);
         console.log("Bid details",this.props.bids);
@@ -99,7 +101,8 @@ componentDidMount(){
                     <div className='row'>
                         <div className="col-md-2"></div>
                         <div className="bid-container">
-                            <form className="bid-form col-md-10" >
+                            <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="bid-form col-md-10" >
+                                {/*<p>BidPrice</p>*/}
                                 <div className="col-md-4 bid-field-group">
                                 <Field
                                     name="BidPrice"
@@ -108,13 +111,13 @@ componentDidMount(){
                                     type = "text"
                                 />
                                 </div>
+                                {/*<p>No of Days</p>*/}
                                 <div className="col-md-4 bid-field-group">
                                 <Field
                                     name="Noofdays"
                                     placeholder = "No Of Days"
                                     type = "text"
                                     component = {this.renderField}
-
                                 />
                                 </div>
                                 <div className="col-md-4 bid-field-group">
@@ -183,7 +186,6 @@ componentDidMount(){
                     </div>
                 </div>
             </div>);
-
     }
 
 }

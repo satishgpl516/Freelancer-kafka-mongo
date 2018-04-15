@@ -45,6 +45,31 @@ router.get('/auth/facebook/callback',passport.authenticate('facebook',{ successR
     failureRedirect: '/login'
 }));
 
+router.post('/signup', function (req, res) {
+
+    kafka.make_request('signup',{"user":req.body}, function(err,results){
+
+        console.log('in result');
+        console.log(results);
+        if(err){
+            res.status(401).json({message: "SignUp failed"});
+
+        }
+        else
+        {
+            if(results.code === 201){
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "User Details Saved successfully"});
+            }
+            else {
+                res.status(401).json({message: "SignUp failed"});
+
+            }
+        }
+    });
+
+});
+
 
 
 router.get('/api/current_user',function(req,res){
@@ -55,6 +80,31 @@ router.get('/api/current_user',function(req,res){
         res.status(202).json({user: false});
 
     }
+});
+
+router.post('/userProfile',function(req, res) {
+    console.log(req.body)
+    console.log("user",req.user);
+
+    kafka.make_request('updateuser',{"user":req.body,"username":req.user.local.username}, function(err,results) {
+
+        console.log('in result');
+        console.log(results);
+        if (err) {
+            res.status(401).json({message: "unexpected error occurred"});
+        }
+        else {
+            if (results.code === 201) {
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "User Details Saved successfully"});
+            }
+            else {
+                res.status(401).json({message: "profile update failed"});
+
+            }
+        }
+    });
+
 });
 
 
@@ -81,10 +131,27 @@ router.get('/biddetails',function (req,res) {
 
 });
 
-//
-// router.get('/profile', authenticationMiddleware(), function(req,res) {
-//     res.send({"status":201, "email" : req.session.username , "username":  req.user.email });
-// });
+router.post('/bid',function(req,res){
+    console.log(req.body);
+    kafka.make_request('postbid',{"bid":req.body,"username":req.user.local.username},function(err,results){
+        console.log("In result");
+        console.log(results);
+        if(err){
+            throw err;
+        }
+        else{
+            if(results.code ===201){
+                console.log("Inside the success criteria");
+                res.status(201).json({message: "user bid posted Saved successfully"});
+            }
+            else{
+                res.status(401).json({message:"user bid failed"});
+            }
+        }
+    })
+});
+
+
 
 router.post('/project',function(req,res) {
     console.log(req.session);
@@ -190,93 +257,9 @@ router.get('/projectdetails',function(req,res){
 
             }
         }
-
-
-    });
-
-
-
-});
-
-
-
-/* Get user Signup */
-router.post('/signup', function (req, res) {
-
-    kafka.make_request('signup',{"user":req.body}, function(err,results){
-
-        console.log('in result');
-        console.log(results);
-        if(err){
-            res.status(401).json({message: "SignUp failed"});
-
-        }
-        else
-        {
-            if(results.code === 201){
-                console.log("Inside the success criteria");
-                res.status(201).json({message: "User Details Saved successfully"});
-            }
-            else {
-                res.status(401).json({message: "SignUp failed"});
-
-            }
-        }
     });
 
 });
-
-// router.post('/signup', function(req,res,next) {
-//     passport.authenticate('local-signup', function (err, user) {
-//         if (err) { return next(err); }
-//
-//
-//     })(req, res, next);
-// });
-
-router.post('/userProfile',function(req, res) {
-    console.log(req.body)
-    console.log("user",req.user);
-
-    kafka.make_request('updateuser',{"user":req.body,"username":req.user.local.username}, function(err,results) {
-
-        console.log('in result');
-        console.log(results);
-        if (err) {
-            res.status(401).json({message: "unexpected error occurred"});
-        }
-        else {
-            if (results.code === 201) {
-                console.log("Inside the success criteria");
-                res.status(201).json({message: "User Details Saved successfully"});
-            }
-            else {
-                res.status(401).json({message: "profile update failed"});
-
-            }
-        }
-    });
-
-});
-
-
-//
-// router.post('/uploadImage',function(req,res){
-//     console.log(req.files);
-//     let imageFile = req.files.newfile;
-//     if (!req.files)
-//         return res.status(400).send('No files were uploaded.');
-//
-//     imageFile.mv(`${__dirname}/public/${req.body.picname}.jpg`, function(err){
-//         if (err) {
-//             return res.status(501).send(err);
-//         }
-//         res.json({file: `public/${req.body.picname}.jpg`});
-//     });
-//
-// })
-
-
 
 
 //Logout the user - invalidate the session

@@ -1,6 +1,7 @@
-import {ROOT_URL, GET_BID_DETAILS} from "./index";
+import {ROOT_URL, GET_BID_DETAILS, POST_BID} from "./index";
 import axios from "axios";
-
+import {history} from "../containers/History";
+import {getProjectDetails} from "./getProjectDetails";
 
 export function getbidDetails(pid) {
     console.log(pid);
@@ -20,6 +21,7 @@ export function getbidDetails(pid) {
 }
 
 export function postBid(values){
+    var projectid = values.projectid;
 
     const request = axios(`${ROOT_URL}/users/bid`, {
         method: "post",
@@ -27,13 +29,12 @@ export function postBid(values){
         withCredentials: true
     });
     request.then(function(res) {
-        if(res.status === 201){
-            alert("project posted successfully")
-            history.push('/dashboard');
+        if(res.status === 201) {
+            console.log("userdetails updated successfully");
+            history.push(`/dashboard`);
         }
-
     });
-    console.log("post project action called");
+    console.log("post bid action called");
 
     return {
         type: POST_BID,

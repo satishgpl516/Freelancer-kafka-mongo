@@ -1,4 +1,4 @@
-import { GET_PROJECT_DETAILS} from "../actions/index";
+import { GET_PROJECT_DETAILS, POST_BID} from "../actions/index";
 import _ from "lodash";
 
 export default function(state={
@@ -14,7 +14,9 @@ export default function(state={
             return (action.payload.data.bids);
             break;
         case POST_BID:
-            return {...state, posted:true};
+            console.log("user bids retrieved succesfully");
+            console.log(action.payload);
+            return (action.payload.data.bids);
             break;
         default:
             return state;

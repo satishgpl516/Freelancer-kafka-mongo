@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var UserProfileSchema = mongoose.Schema({
-    projectowner: String,
+    username: String,
     firstname: String,
     lastname: String,
     aboutme: String,

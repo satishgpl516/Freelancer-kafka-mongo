@@ -56,8 +56,14 @@ class App extends Component {
                     )
                 }}/>
 
-                    <PrivateRoute path = "/user-profile/" component = {UserProfile}/>
-                    <PrivateRoute path = "/getuserposted/" component = {UserPosted}/>
+                <Route exact path = "/user-profile/:uid" render = {(props) => {
+                    return logStat ? (
+                        <ProjectDetails id={props.match.params.uid}/>
+                    ) : (
+                        <Redirect to="/login"/>
+                    )
+                }}/>
+                <PrivateRoute path = "/getuserposted/" component = {UserPosted}/>
                 <Route path="/" render={() => (
                     !logStat ? (
                         <Home />

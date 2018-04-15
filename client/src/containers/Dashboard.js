@@ -24,11 +24,9 @@ class Dashboard extends  Component{
 
     }
     mouseEnter = () => {
-        console.log('mouse enter')
         this.setState({ isMouseInside: true });
     }
     mouseLeave = () => {
-        console.log('mouse enter')
         this.setState({ isMouseInside: false });
     }
     componentDidMount(){
@@ -39,13 +37,13 @@ class Dashboard extends  Component{
         this.props.doLogout();
     }
     displayProjects(){
-        console.log("this project",this.props.projects);
+       console.log("this project",this.props.projects);
         return _.map(this.props.projects, proj => {
-            console.log(proj._id, proj.projectname);
+           // console.log(proj._id, proj.projectname);
             this.state.projectid = proj._id;
             return (
 
-                <tr onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className="ProjectTable-row project-details" key={proj._id+"row"}>
+                <tr  className="ProjectTable-row project-details" key={proj._id+"row"}>
                     <td className=" ProjectTable-cell ProjectTable-summaryColumn title-col" key={proj._id+"data"}>
                         <h2 className="ProjectTable-title" key={proj._id+"h2"}>
                             <span className= "ProjectTable-titleIcon" key={proj._id+"projname"}>
@@ -122,7 +120,7 @@ class Dashboard extends  Component{
     }
 }
 function mapStateToProps(state){
-    console.log(state);
+    console.log("state",state);
     return ({projects: state.projects});
 }
 
