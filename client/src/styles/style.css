@@ -936,4 +936,24 @@ body{
     content: "\f1a0";
 }
 
+.App .bid-form-group{
+    margin-bottom: 20px;
+    float: left;
+}
 
+.App .shadow{
+    margin-bottom: 30px;
+}
+
+.App .bid-field-group{
+    float:left;
+}
+
+.App .bid-container{
+    background: white;
+
+}
+
+.App .bid-form{
+    margin-top: 20px;
+}

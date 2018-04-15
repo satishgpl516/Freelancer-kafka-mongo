@@ -1,0 +1,101 @@
+<div id="bid-stats" class="span9 margin-0 margin-b5">
+                    <div id="pricing" class="span4 margin-0 margin-b5 inline-bid-note ">
+                        <strong class="regular">
+                            Bid:
+                        </strong><br>
+                        <div class="control-group margin-l0">
+                            <div class="input-prepend input-append margin-0">
+                                <span class="span margin-0 padding-t5 inline-bid-title">Paid to you:</span>
+                                <div style="padding-left:80px">
+                                    <span class="add-on" id="bid-currency-sign">$</span>
+                                    <input class="margin-b0 margin-l0 input-mini earnedSum" name="sum" type="text" value="20">
+                                    <input class="sum actualBidAmount" type="hidden" name="sum" value="25">
+                                    <span class="add-on" id="bid-currency-code">
+                                        USD
+                                    </span>
+                                    <span class="small help-inline"><span for="sum" generated="true" class="error"></span></span>
+                                </div>
+                            </div>
+                            <div class="input-prepend input-append margin-0 padding-t5">
+                                <span class="span margin-0 inline-bid-title">Your bid:</span>
+                                <b class="regular" style="display: inline-block;min-width: 16px;padding-right: 5px;text-align: center;">$</b>
+                                <span class="input-mini inline-bid-currency">
+                                    <b class="regular" id="bidSum">25</b>
+                                    <b class="regular">
+                                        USD
+                                    </b>
+                                </span>
+                                <span class="bidsum_tip" style="position:relative;">
+                                    <img src="https://cdn5.f-cdn.com/static/css/images/pages/post-project/question.png">
+                                    <div class="bidSumTipContent span3 custom-hover left padding-0 well black left" style="display:none; position:absolute; top:-12px; left:-6px; background: #fff;">
+                                        <div class="relative">
+                                            <div class="tip" style="top:24px;"></div>
+                                            <div class="pad">
+                                                <span align="left margin-b0">Includes $5 USD Freelancer fee</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="delivery" class="span3 margin-0 inline-bid-columns ">
+                        <strong class="regular">
+                            Deliver in: <br>
+                        </strong>
+                        <div class="control-group">
+                        <div class="input-append margin-0">
+                                <input class="margin-b0 margin-l0 input-mini period" name="period" type="text" value="1">
+                                <span class="add-on">
+                                    Days
+                                </span>
+                                <span class="small help-inline"><span for="period" generated="true" class="error"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3 margin-0 inline-bid-columns  hide  ">
+                        <strong class="regular">
+                            Hourly Rate: <br>
+                        </strong>
+                        <div class="control-group">
+                            <div class="input-append margin-0">
+                                <input class="margin-b0 margin-l0 input-mini period" id="hourlyRate" name="hourlyRate" value="0">
+                                <span class="add-on">
+                                    USD/Hr
+                                </span>
+                                <div class="small padding-t5">
+                                    This will be used if the employer decides that he or she wants to pay per hour.
+                                </div>
+                                <span class="small help-inline"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="milestone" class="span3 margin-0 inline-bid-columns" style="display:none;">
+                        <strong class="regular">
+                            Request Milestone
+                        </strong>
+                        <span class="popover_el" id="milestone_tip" rel="popover" data-trigger="hover" data-placement="right" data-original-title="Request Milestone" data-content="Request the amount you would like the Employer to deposit before you begin work. You can request to have this payment released to you as you complete the project.">
+                            <img src="https://cdn5.f-cdn.com/static/css/images/pages/post-project/question.png">
+                        </span>
+                        <br>
+                        
+                            <div class="control-group">
+                                <div class="input-append margin-0 span3">
+                                    <input class="margin-b0 margin-l0 input-mini milestone_percentage" value="100" name="milestone_percentage" type="text">
+                                    <span class="add-on">
+                                        %
+                                    </span>
+                                    <span class="small help-inline"></span>
+                                </div>
+                            </div>
+                        
+                        <div style="font-size: 13px; margin-top: 5px; display: inline-block;">
+                            $
+                            <span id="milestone_price">25</span> USD
+                        </div>
+
+                    </div>
+
+                    
+                    <div class="section margin-b10 clear"></div>
+                </div>

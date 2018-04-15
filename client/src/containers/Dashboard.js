@@ -13,6 +13,23 @@ class Dashboard extends  Component{
         super(props);
         // this.displayProjects = this.displayProjects.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.mouseEnter = this.mouseEnter.bind(this);
+
+    }
+    state = {
+        isMouseInside: false,
+        projectid: null,
+        bidprice: 0,
+        noofdays: 0
+
+    }
+    mouseEnter = () => {
+        console.log('mouse enter')
+        this.setState({ isMouseInside: true });
+    }
+    mouseLeave = () => {
+        console.log('mouse enter')
+        this.setState({ isMouseInside: false });
     }
     componentDidMount(){
         this.props.getProjects();
@@ -25,9 +42,10 @@ class Dashboard extends  Component{
         console.log("this project",this.props.projects);
         return _.map(this.props.projects, proj => {
             console.log(proj._id, proj.projectname);
+            this.state.projectid = proj._id;
             return (
 
-                <tr className="ProjectTable-row project-details" key={proj._id+"row"}>
+                <tr onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className="ProjectTable-row project-details" key={proj._id+"row"}>
                     <td className=" ProjectTable-cell ProjectTable-summaryColumn title-col" key={proj._id+"data"}>
                         <h2 className="ProjectTable-title" key={proj._id+"h2"}>
                             <span className= "ProjectTable-titleIcon" key={proj._id+"projname"}>
@@ -42,8 +60,8 @@ class Dashboard extends  Component{
                     </td>
                     <td className=" ProjectTable-cell ProjectTable-startedColumn started-col" key={proj._id+"time"}>6d 23h</td>
                     <td className=" ProjectTable-cell ProjectTable-priceColumn price-col" key={proj._id+"price"}>1627</td>
-                    <td className=" ProjectTable-cell ProjectTable-priceColumn" key={proj._id+"bidbtn"}>
-                        <Link to = '/projectdetails' className= "btn btn-primary ">Bid</Link>
+                    <td  className=" ProjectTable-cell ProjectTable-priceColumn" key={proj._id+"bidbtn"}>
+                        {this.state.isMouseInside ? <Link to = {`/project-details/${proj._id}`} className= "btn btn-primary " >Bid</Link> : <p/> }
                     </td>
                 </tr>
             );
@@ -97,6 +115,7 @@ class Dashboard extends  Component{
                     </div>
 
                 </div>
+
             </div>
         );
 

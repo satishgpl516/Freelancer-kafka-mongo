@@ -11,6 +11,7 @@ export const GET_PROJECT_DETAILS = "GET_PROJECT_DETAILS";
 export const GET_BID_DETAILS = 'GET_BID_DETAILS';
 export const GET_POSTED_PROJECTS = 'GET_POSTED_PROJECTS';
 export const FETCH_USER = 'FETCH_USER';
+export const POST_BID = 'POST_BID';
 //export const API_KEY = '?key=satish1234';
 
 

@@ -6,7 +6,9 @@ var projectDetails = mongoose.Schema({
         projectdescription: String,
         projectskills: [String],
         projectowner: String,
-        projectrange: String
+        projectrange: String,
+        noofbids: String,
+        avgprice: String
 
 });
 

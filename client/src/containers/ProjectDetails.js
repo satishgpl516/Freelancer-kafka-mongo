@@ -2,7 +2,8 @@ import React, {Component } from 'react';
 import {Route, Link , withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {getProjectDetails} from "../actions/getProjectDetails";
-import {getbidDetails} from "../actions/getbidDetails";
+import {postBid} from "../actions/getbidDetails";
+import {Field, reduxForm} from 'redux-form';
 import DashBoardHeader from './DashboardHeader';
 import "../styles/ProjectStyle.css"
 import BiddingCard from "./BiddingCard";
@@ -26,11 +27,27 @@ componentDidMount(){
     //this.props.getbidDetails(this.state.pid);
 
 }
+    renderField(field){
+        const {input, meta:{touched,error}} = field;
+        const cname = `bid-form-group ${touched && error? 'has-danger' : ''} `;
+
+        return(
+            <div className= {cname}>
+                {/*<label>{field.label}</label>*/}
+                <input className="form-bid large-input"
+                       {...input} {...field}
+                />
+                <div className="text-help">
+                    {touched ? error: ''}
+                </div>
+            </div>
+        )
+
+    }
 
     render(){
+        const { handleSubmit, load, pristine, reset, submitting } = this.props;
         console.log("Inside the Projects: ",this.props.id);
-
-
         let projectName = "Freelancer"; //_.map(this.props.data,'ProjectName');
         let no_of_bids  = 3; //this.props.bid_data.length;
         let avg_bid = 437;
@@ -72,13 +89,41 @@ componentDidMount(){
                                         </div>
                                     </div>
                                     {/*Bid Button*/}
-
-                                    <div className='headerContainer-items col-md-2' id = 'bid_button'>
-                                        <div id = 'heading'><Link className='btn btn-primary' to='#' >Bid</Link></div>
-                                    </div>
+                                    {/*<div className='headerContainer-items col-md-2' id = 'bid_button'>*/}
+                                        {/*<div id = 'heading'><Link className='btn btn-primary' to='#' >Bid</Link></div>*/}
+                                    {/*</div>*/}
                                 </div>
                             </div>
                         </div >
+                    </div>
+                    <div className='row'>
+                        <div className="col-md-2"></div>
+                        <div className="bid-container">
+                            <form className="bid-form col-md-10" >
+                                <div className="col-md-4 bid-field-group">
+                                <Field
+                                    name="BidPrice"
+                                    placeholder = "Bid Price"
+                                    component = {this.renderField}
+                                    type = "text"
+                                />
+                                </div>
+                                <div className="col-md-4 bid-field-group">
+                                <Field
+                                    name="Noofdays"
+                                    placeholder = "No Of Days"
+                                    type = "text"
+                                    component = {this.renderField}
+
+                                />
+                                </div>
+                                <div className="col-md-4 bid-field-group">
+                                 <button type="submit" disabled={pristine || submitting} className="btn btn-primary ">
+                                    Place bid
+                                 </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div className='row'>
 
@@ -117,7 +162,7 @@ componentDidMount(){
 
                                 </div>
                                 <div id = 'bid_header_items' className='bidContainer-header-items col-md-2'>
-                                    <p>REPUTATION</p>
+                                    <p>NO Of DAYS</p>
                                 </div>
                                 <div id = 'bid_header_items' className='bidContainer-header-items col-md-2'>
                                     <p>BID ({currency})</p>
@@ -143,6 +188,24 @@ componentDidMount(){
 
 }
 
+function validate(values){
+    const errors = {};
+    //validate input from values
+
+    if(!values.bidprice){
+        errors.bidprice = 'Please enter bid price\n';
+    }
+
+    if(!values.noofdays || values.noofdays.length < 0){
+        errors.noofdays= 'please enter No of days';
+    }
+
+
+    //if errors is empty , the form is fine to submit
+    //if errors has *any* properties, redux form assumes that form is invalid
+    return errors;
+}
+
 function mapStateToProps(state){
     return ({
         data :state.projects,
@@ -155,11 +218,13 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         ...bindActionCreators({
-              getProjectDetails
+              getProjectDetails,postBid
         },dispatch)
     }
 }
 
 
-
-export default connect(mapStateToProps,mapDispatchToProps)(ProjectDetails);
+export default reduxForm({
+    validate,
+    form: 'postBidForm'
+}) (connect(mapStateToProps,mapDispatchToProps)(ProjectDetails));

@@ -23,13 +23,13 @@ p{
 
 #bid_value{
     float: end;
-    font-size: 24px;
+    font-size: 20px;
     align-content: center;
 
 }
 #bid_value_number{
     padding-right: 20px;
-    margin-top: 36px;
+    font-size: 20px;
 
 }
 #username{
@@ -38,7 +38,4 @@ p{
     font-family: "Comic Sans MS";
     color: #008bcb;
 
-}
-#bid_value_time{
-    font-size: 12px;
 }
