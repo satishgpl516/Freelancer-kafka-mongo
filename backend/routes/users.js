@@ -86,7 +86,7 @@ router.post('/userProfile',function(req, res) {
     console.log(req.body)
     console.log("user",req.user);
 
-    kafka.make_request('updateuser',{"user":req.body,"username":req.user.local.username}, function(err,results) {
+    kafka.make_request('updateuser',{"user":req.body,"username":req.username}, function(err,results) {
 
         console.log('in result');
         console.log(results);
@@ -182,10 +182,11 @@ router.post('/project',function(req,res) {
 
 
 router.get('/projects',function(req,res){
+
      if(req.isAuthenticated()) {
          console.log("Authenticated:", req.isAuthenticated());
 
-     kafka.make_request('getprojects',{"project":req.body},function(err,results){
+     kafka.make_request('getprojects',{"project":req.query},function(err,results){
          console.log('in result');
          console.log(results);
          if (err) {
@@ -288,10 +289,10 @@ router.get('/projectdetails',function(req,res){
 //Logout the user - invalidate the session
 router.get('/logout', function (req, res) {
     console.log("Authenticated:",req.user);
-    req.logout();
+   // req.logout();
     req.session.destroy(function (err) {
         if (!err) {
-            res.status(200).clearCookie('connect.sid', {path: '/login'}).json({status: "Success"});
+            res.status(200).clearCookie('connect.sid', {path: '/login'}).json({message: "Success"});
         } else {
             // handle error case...
         }

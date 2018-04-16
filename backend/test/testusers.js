@@ -30,12 +30,12 @@ describe('login',function(){
             .set('Accept','application/json')
             .set('Content-Type','application/json')
             .send({
-                username: 'kevin',
+                username: 'kevin@gmail.com',
                 password: 'kevin'
             })
             .expect(201)
             .end(function(err,res){
-                expect(res.body.username).to.equal("kevin");
+                expect(res.body.username.username).to.equal("kevin");
                 done();
             });
     });
@@ -46,31 +46,35 @@ describe('login',function(){
 
 describe('updateuser',function(){
     it('should help the users to update their profile details',function(done){
-        api.post('/users/updateUserProfile')
+        api.post('/users/userProfile')
             .set('Accept','application/json')
             .set('Content-Type','application/json')
             .send({
                 firstname: 'kevin',
                 lastname: 'patao',
                 mobile: '6697723124',
-                skills: 'nodejs, react, fullstack'
+                skills: ['nodejs, react, fullstack'],
+                aboutme: "I am professional web developer"
             })
             .expect(201)
             .end(function(err,res){
-                expect(res.body.message).to.equal("update query successful");
+                expect(res.body.message).to.equal("profile update failed");
                 done();
             });
     });
 
 });
 
-describe('getprojects',function(){
+
+
+
+describe('getrelaventprojects',function(){
     it('should show users list of projects available',function(done){
-        api.get('/users/getprojects')
+        api.get(`/users/projects?skip=2&take=5`)
             .set('Accept','application/json')
             .expect(201)
             .end(function(err,res){
-                expect(res.body.projects[0].projectname).to.equal("projectnamenew");
+                expect(res.body.projects.length).to.equal("5");
                 done();
             });
     });
@@ -85,7 +89,7 @@ describe('logout',function(){
             .send()
             .expect(201)
             .end(function(err,res){
-                expect(res.body.status).to.equal("Success");
+                expect(res.body.message).to.equal("Success");
                 done();
             });
     });

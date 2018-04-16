@@ -14,7 +14,8 @@ class Dashboard extends  Component{
         // this.displayProjects = this.displayProjects.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this);
-
+        this.changeRows = this.changeRows.bind(this);
+        this.skippages = this.skippages.bind(this);
     }
     state = {
         isMouseInside: false,
@@ -22,7 +23,7 @@ class Dashboard extends  Component{
         bidprice: 0,
         noofdays: 0,
         query : null,
-        take:10,
+        take:2,
         skip:0
 
     }
@@ -50,6 +51,20 @@ class Dashboard extends  Component{
     handleLogout(){
         const user = sessionStorage.getItem('username');
         this.props.doLogout();
+    }
+    changeRows(event){
+        this.setState({
+            take: event.target.value},
+            () => {
+                this.props.getProjects(this.state.skip,this.state.take);
+            })
+    }
+    skippages(event){
+        this.setState({
+            skip: this.state.skip+this.state.take
+        }, () => {
+            this.props.getProjects(this.state.skip,this.state.take);
+        })
     }
     displayProjects(){
        console.log("this project",this.props.projects);
@@ -121,24 +136,24 @@ class Dashboard extends  Component{
                             <div className="projectFilters=row">
                                 <div className="projectFilters-secondaryControls">
                                     <div className="ProjectFilters-quantity">
-                                        <label for="filter-length" className="ProjectFilters-quantityLabel">Results per page</label>
-                                        <select name="filter-length" id="quantity-selector" className="ProjectFilters-quantitySelector default-input" data-id="filter-length">
-                                            <option>5</option>
-                                            <option selected="">10</option>
-                                            <option>20</option>
+                                        <label htmlFor="filter-length" className="ProjectFilters-quantityLabel">Results per page</label>
+                                        <select onChange={this.changeRows} name="filter-length" id="quantity-selector" className="ProjectFilters-quantitySelector default-input" data-id="filter-length">
+                                            <option>2</option>
+                                            <option selected="">5</option>
+                                            <option>10</option>
                                         </select>
                                     </div>
                                     <div className="pagination-buttons">
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination justify-content-center">
                                             <li className="page-item disabled">
-                                                <a className="page-link" href="#" tabindex="-1">Previous</a>
+                                                <a className="page-link" href="#">Previous</a>
                                             </li>
-                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
+                                            <li className="page-item"><a className="page-link" onClick={this.skippages}>1</a></li>
+                                            <li className="page-item"><a className="page-link" onClick={this.skippages}>2</a></li>
                                             <li className="page-item"><a className="page-link" href="#">3</a></li>
                                             <li className="page-item">
-                                                <a className="page-link" href="#">Next</a>
+                                                <a className="page-link" onClick={this.skippages}>Next</a>
                                             </li>
                                         </ul>
                                     </nav>

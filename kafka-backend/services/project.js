@@ -40,6 +40,10 @@ function postProject(msg, callback){
 
 function allProjects(msg, callback) {
     res ={};
+    var limit = Number(msg.project.take);
+    var skip = Number(msg.project.skip);
+    console.log(msg);
+    console.log("skip,take",skip,limit);
     console.log("All projects function :", msg);
     Project.find({}, function (err, projects) {
         console.log('all projects results', projects);
@@ -52,21 +56,17 @@ function allProjects(msg, callback) {
         }
         else{
             if(projects.length > 0){
-
                 res.code = 201;
                 res.value = "All Projects";
                 res.data = projects;
             }
             else{
-                throw err;
                 res.code = 401;
                 res.value = "Failed to fetch"
-
             }
-
             callback(null,res);
         }
-    } );
+    } ).skip(skip).limit(limit);
 
 }
 
